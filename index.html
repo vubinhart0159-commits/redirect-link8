@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Device Adaptive Link</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        text-align: center;
+        padding: 30px;
+        background:#fafafa;
+    }
+    .url-box {
+        width: 92%;
+        font-size: 20px;
+        padding: 16px;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        resize: none;
+        background:#f8f8f8;
+        line-height: 1.3;
+        height: 55px;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-top:20px;
+    }
+    .btn {
+        padding: 16px 24px;
+        font-size: 20px;
+        background:black;
+        color:white;
+        border:none;
+        border-radius:12px;
+        margin-top:25px;
+    }
+</style>
+</head>
+<body>
+
+<h2>Mở liên kết</h2>
+
+<div id="iosView" style="display:none;">
+    <p>Chạm 1 lần để chọn URL trên iOS</p>
+    <textarea id="iosUrl" class="url-box" readonly>https://beacons.ai/tuimufeedback</textarea>
+</div>
+
+<div id="androidView" style="display:none;">
+    <p>Nhấn nút để mở trong Chrome</p>
+    <button class="btn" id="openBtn">Mở bằng Chrome</button>
+</div>
+
+<script>
+const link = "https://beacons.ai/tuimufeedback";
+
+// Detect OS
+const ua = navigator.userAgent.toLowerCase();
+const isIOS = /iphone|ipad|ipod/.test(ua);
+const isAndroid = /android/.test(ua);
+
+// UI switching
+if (isIOS) {
+    document.getElementById("iosView").style.display = "block";
+
+    const urlBox = document.getElementById("iosUrl");
+
+    function robustSelect() {
+        urlBox.scrollIntoView({ behavior: "smooth", block:"center" });
+        urlBox.select();
+        try { urlBox.setSelectionRange(0, urlBox.value.length); } catch(e){}
+    }
+
+    urlBox.addEventListener("touchstart", () => {
+        setTimeout(() => robustSelect(), 25);
+    }, {passive:true});
+
+    urlBox.addEventListener("click", () => {
+        setTimeout(() => robustSelect(), 10);
+    });
+
+} else if (isAndroid) {
+    document.getElementById("androidView").style.display = "block";
+
+    document.getElementById("openBtn").addEventListener("click", () => {
+        window.location.href = link;
+    });
+}
+</script>
+
+</body>
+</html>
